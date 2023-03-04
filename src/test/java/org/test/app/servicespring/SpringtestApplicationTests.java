@@ -4,14 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.test.app.servicespring.exceptions.DineroInsuficienteException;
 import org.test.app.servicespring.irepositories.IBancoRepository;
 import org.test.app.servicespring.irepositories.ICuentaRepository;
 import org.test.app.servicespring.iservices.ICuentaService;
 import org.test.app.servicespring.models.Banco;
 import org.test.app.servicespring.models.Cuenta;
-import org.test.app.servicespring.services.CuentaServiceImpl;
 import org.test.app.servicespring.util.Datos;
 
 import java.math.BigDecimal;
@@ -19,16 +20,15 @@ import java.math.BigDecimal;
 @SpringBootTest
 class SpringtestApplicationTests {
 
+	@MockBean
 	ICuentaRepository cuentaRepository;
+	@MockBean
 	IBancoRepository bancoRepository;
+	@Autowired
 	ICuentaService service;
 
 	@BeforeEach
-	void setUp() {
-		cuentaRepository = Mockito.mock(ICuentaRepository.class);
-		bancoRepository = Mockito.mock(IBancoRepository.class);
-		service = new CuentaServiceImpl(cuentaRepository, bancoRepository);
-	}
+	void setUp() {}
 
 	@Test
 	void contextLoads() {
@@ -87,5 +87,19 @@ class SpringtestApplicationTests {
 
 		Mockito.verify(bancoRepository, Mockito.times(1)).findById(1L);
 		Mockito.verify(bancoRepository, Mockito.never()).update(Mockito.any(Banco.class));
+	}
+
+	@Test
+	void contextLoads3() {
+		Mockito.when(cuentaRepository.findById(1L)).thenReturn(Datos.CUENTA_001);
+
+		Cuenta c1 = service.findById(1L);
+		Cuenta c2 = service.findById(1L);
+
+		assertSame(c1, c2);
+		assertEquals("Andres", c1.getPersona());
+		assertEquals("Andres", c2.getPersona());
+
+		Mockito.verify(cuentaRepository, Mockito.times(2)).findById(1L);
 	}
 }
