@@ -1,11 +1,17 @@
 package org.test.app.servicespring.models;
 
+import jakarta.persistence.*;
 import org.test.app.servicespring.exceptions.DineroInsuficienteException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "cuentas")
 public class Cuenta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String persona;
     private BigDecimal saldo;
