@@ -53,10 +53,10 @@ class SpringtestApplicationTests {
 
 		Mockito.verify(cuentaRepository, Mockito.times(3)).findById(1L);
 		Mockito.verify(cuentaRepository, Mockito.times(3)).findById(2L);
-		Mockito.verify(cuentaRepository, Mockito.times(2)).update(Mockito.any(Cuenta.class));
+		Mockito.verify(cuentaRepository, Mockito.times(2)).save(Mockito.any(Cuenta.class));
 
 		Mockito.verify(bancoRepository, Mockito.times(2)).findById(1L);
-		Mockito.verify(bancoRepository).update(Mockito.any(Banco.class));
+		Mockito.verify(bancoRepository).save(Mockito.any(Banco.class));
 	}
 
 	@Test
@@ -83,10 +83,10 @@ class SpringtestApplicationTests {
 
 		Mockito.verify(cuentaRepository, Mockito.times(3)).findById(1L);
 		Mockito.verify(cuentaRepository, Mockito.times(2)).findById(2L);
-		Mockito.verify(cuentaRepository, Mockito.never()).update(Mockito.any(Cuenta.class));
+		Mockito.verify(cuentaRepository, Mockito.never()).save(Mockito.any(Cuenta.class));
 
 		Mockito.verify(bancoRepository, Mockito.times(1)).findById(1L);
-		Mockito.verify(bancoRepository, Mockito.never()).update(Mockito.any(Banco.class));
+		Mockito.verify(bancoRepository, Mockito.never()).save(Mockito.any(Banco.class));
 	}
 
 	@Test
