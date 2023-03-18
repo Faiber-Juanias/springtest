@@ -1,6 +1,7 @@
 package org.test.app.servicespring.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.test.app.servicespring.irepositories.IBancoRepository;
 import org.test.app.servicespring.irepositories.ICuentaRepository;
 import org.test.app.servicespring.iservices.ICuentaService;
@@ -21,21 +22,25 @@ public class CuentaServiceImpl implements ICuentaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Cuenta findById(Long id) {
         return cuentaRepository.findById(id).orElseThrow();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int getTotalTransferences(Long bancoId) {
         return bancoRepository.findById(bancoId).orElseThrow().getTotalTransferencias();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BigDecimal reviewSaldo(Long cuentaId) {
         return cuentaRepository.findById(cuentaId).orElseThrow().getSaldo();
     }
 
     @Override
+    @Transactional
     public void transfer(Long numCuentaOrigin, Long numCuentaFinal, BigDecimal monto, Long bancoId) {
         Cuenta cOrigin = cuentaRepository.findById(numCuentaOrigin).orElseThrow();
         cOrigin.debito(monto);
