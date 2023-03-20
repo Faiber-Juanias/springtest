@@ -1,8 +1,8 @@
 package org.test.app.servicespring.models;
 
-import jakarta.persistence.*;
 import org.test.app.servicespring.exceptions.DineroInsuficienteException;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
