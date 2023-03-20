@@ -9,6 +9,7 @@ import org.test.app.servicespring.models.Banco;
 import org.test.app.servicespring.models.Cuenta;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class CuentaServiceImpl implements ICuentaService {
@@ -54,5 +55,17 @@ public class CuentaServiceImpl implements ICuentaService {
         int totalTransferences = banco.getTotalTransferencias();
         banco.setTotalTransferencias(++totalTransferences);
         bancoRepository.save(banco);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Cuenta> findAll() {
+        return cuentaRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Cuenta save(Cuenta cuenta) {
+        return cuentaRepository.save(cuenta);
     }
 }

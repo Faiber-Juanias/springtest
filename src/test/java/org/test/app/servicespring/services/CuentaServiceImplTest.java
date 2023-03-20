@@ -14,6 +14,8 @@ import org.test.app.servicespring.models.Cuenta;
 import org.test.app.servicespring.util.Datos;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,4 +101,32 @@ class CuentaServiceImplTest {
         Mockito.verify(cuentaRepository, Mockito.times(2)).findById(1L);
     }
 
+    @Test
+    void testFindAll() {
+        List<Cuenta> datos = Arrays.asList(Datos.CUENTA_001.orElseThrow(), Datos.CUENTA_002.orElseThrow());
+        Mockito.when(cuentaRepository.findAll()).thenReturn(datos);
+
+        List<Cuenta> cuentas = service.findAll();
+        assertFalse(cuentas.isEmpty());
+        assertEquals(2, cuentas.size());
+        assertTrue(cuentas.contains(Datos.CUENTA_002.orElseThrow()));
+
+        Mockito.verify(cuentaRepository).findAll();
+    }
+
+    @Test
+    void testSave() {
+        Cuenta cP = new Cuenta(null, "Pepe", new BigDecimal("3000"));
+        Mockito.when(cuentaRepository.save(Mockito.any())).then(invocationOnMock -> {
+            Cuenta c = invocationOnMock.getArgument(0);
+            c.setId(3L);
+            return c;
+        });
+        Cuenta cuenta = service.save(cP);
+        assertEquals("Pepe", cuenta.getPersona());
+        assertEquals(3L, cuenta.getId());
+        assertEquals("3000", cuenta.getSaldo().toPlainString());
+
+        Mockito.verify(cuentaRepository).save(Mockito.any());
+    }
 }
